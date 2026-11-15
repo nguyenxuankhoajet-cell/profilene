@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>Trang cá nhân</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#07070d;--panel:rgba(18,16,30,.72);--line:rgba(168,85,247,.28);--text:#f3f0ff;--muted:#a79fc4;--a1:#a855f7;--a2:#ec4899;--ok:#22c55e;
+    --font:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:'JetBrains Mono',ui-monospace,Consolas,monospace}
+  *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.55;min-height:100vh;overflow-x:hidden}
+  #sky{position:fixed;inset:0;z-index:-2;width:100%;height:100%}
+  body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background:radial-gradient(40vw 40vw at 20% 20%,rgba(168,85,247,.22),transparent 70%),radial-gradient(35vw 35vw at 85% 70%,rgba(236,72,153,.16),transparent 70%);animation:drift 18s ease-in-out infinite alternate}
+  @keyframes drift{to{transform:translate(4%,3%) scale(1.08)}}
+  button{font-family:inherit}:focus-visible{outline:2px solid var(--a1);outline-offset:2px}
+  /* Màn hình chào */
+  #enter{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer;transition:opacity .7s,visibility .7s}
+  #enter.hide{opacity:0;visibility:hidden}#enter b{font-size:clamp(22px,5vw,34px);font-weight:800;letter-spacing:.02em}
+  #enter span{font-family:var(--mono);color:var(--muted);font-size:14px;animation:blink 1.4s infinite}@keyframes blink{50%{opacity:.25}}
+  /* Thẻ chính */
+  .wrap{max-width:1020px;margin:0 auto;padding:28px 16px 130px;perspective:1200px}
+  .card{background:var(--panel);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 60px rgba(168,85,247,.08);transform-style:preserve-3d;transition:transform .15s ease-out}
+  .banner{height:150px;background:linear-gradient(120deg,#2a1450,#5b1b6e,#1b1240) center/cover;position:relative}
+  .banner::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(10,8,20,.9))}
+  .live{position:absolute;right:16px;top:14px;z-index:2;display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.55);border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);animation:pulse 1.8s infinite}@keyframes pulse{50%{transform:scale(1.5);opacity:.6}}
+  .head{display:flex;gap:18px;align-items:flex-end;padding:0 24px;margin-top:-52px;position:relative;z-index:2;flex-wrap:wrap}
+  .ava{position:relative;width:108px;height:108px;flex:0 0 auto}
+  .ava::before{content:"";position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(var(--a1),var(--a2),#38bdf8,var(--a1));animation:spin 5s linear infinite}
+  .ava i{position:absolute;inset:0;border-radius:50%;background:#120d22 center/cover;border:3px solid #0d0a18;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:38px;font-weight:800;overflow:hidden}
+  .ava i img{width:100%;height:100%;object-fit:cover}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .who{padding-bottom:6px;min-width:0}
+  h1{margin:0;font-size:clamp(26px,5vw,38px);font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  #name{display:inline-block;background:linear-gradient(90deg,#fff 0%,#d8b4fe 25%,#f472b6 50%,#d8b4fe 75%,#fff 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 6s linear infinite}
+  @keyframes shimmer{to{background-position:-300% 0}}
+  .badge{width:22px;height:22px;flex:0 0 auto;color:#fff;-webkit-text-fill-color:initial}
+  .sub{color:var(--muted);font-size:14px;margin-top:2px}.sub b{color:var(--text);font-weight:600}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;padding:18px 24px 6px}
+  .tag{border:1px solid var(--line);background:rgba(168,85,247,.08);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;transition:.2s}.tag:hover{background:rgba(168,85,247,.22);transform:translateY(-2px)}
+  .cols{display:grid;gap:18px;padding:14px 24px 22px;grid-template-columns:1fr}
+  .box{border:1px solid var(--line);background:rgba(10,8,20,.55);border-radius:16px;padding:14px 16px}
+  .term{font-family:var(--mono);font-weight:700;font-size:14px;display:flex;gap:8px;min-height:50px;align-items:center}
+  .term .p{color:var(--a1)}#typed::after{content:"";display:inline-block;width:8px;height:1.05em;background:var(--a2);margin-left:3px;vertical-align:-2px;animation:blink 1s steps(2) infinite}
+  .bio{color:#d9d3ee;margin:14px 2px}.lbl{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;color:var(--muted);margin:16px 2px 8px;text-transform:uppercase}
+  .status{display:flex;align-items:center;gap:10px;font-weight:600}.status small{display:block;color:var(--muted);font-weight:500;font-size:12px;font-family:var(--mono)}
+  .comm{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.comm .logo{width:62px;height:62px;border-radius:14px;background:linear-gradient(135deg,var(--a1),var(--a2));flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:26px}
+  .comm .t{flex:1;min-width:150px}.comm .t b{font-size:16px}.o{display:inline-block;margin-left:8px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;background:rgba(255,255,255,.12);border-radius:5px;padding:1px 7px}
+  .comm p{margin:3px 0 0;color:var(--muted);font-size:13px}
+  .btn{border:0;border-radius:12px;padding:11px 20px;font-weight:700;font-size:14px;cursor:pointer;background:#fff;color:#12091f;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:.2s}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,255,255,.18)}
+  .btn[aria-disabled=true]{opacity:.45;pointer-events:none}
+  .links{display:grid;grid-template-columns:1fr 1fr;gap:10px}.links a{border:1px solid var(--line);background:rgba(10,8,20,.55);border-radius:14px;padding:14px;text-align:center;font-weight:700;color:var(--text);text-decoration:none;transition:.2s}
+  .links a:hover{background:rgba(168,85,247,.2);transform:translateY(-3px)}.links a[aria-disabled=true]{opacity:.4;pointer-events:none}
+  .foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding:13px 24px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em}
+  /* Máy phát nhạc */
+  .player{position:fixed;z-index:60;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));background:rgba(14,12,26,.88);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:20px;padding:10px 12px;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+  .pr{display:flex;align-items:center;gap:12px}.disc{width:44px;height:44px;border-radius:50%;flex:0 0 auto;background:conic-gradient(#2a1450,var(--a1),#2a1450,var(--a2),#2a1450);border:2px solid #1b1236;position:relative}
+  .disc::after{content:"";position:absolute;inset:14px;border-radius:50%;background:#0b0816;border:2px solid #3b2a66}.disc.on{animation:spin 3s linear infinite}
+  .meta{flex:1;min-width:0;cursor:pointer;background:none;border:0;color:inherit;text-align:left;padding:0}.meta b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .meta span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ctl{display:flex;align-items:center;gap:4px}.ib{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center}.ib:hover{background:rgba(255,255,255,.1)}
+  .ib.play{background:#fff;color:#12091f}.ib svg{width:20px;height:20px;fill:currentColor}.vol{width:70px;accent-color:var(--a1);display:none}
+  .bar{height:5px;border-radius:5px;background:rgba(255,255,255,.14);margin-top:9px;cursor:pointer;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a1),var(--a2))}
+  .list{display:none;margin-top:10px;border-top:1px solid var(--line);padding-top:6px;max-height:210px;overflow:auto}.list.on{display:block}
+  .list button{width:100%;display:flex;gap:10px;align-items:center;border:0;background:none;color:var(--text);padding:9px 6px;border-radius:10px;cursor:pointer;text-align:left;font-size:14px}.list button:hover{background:rgba(255,255,255,.07)}
+  .list button.now{color:#f9a8d4;font-weight:700}.list em{font-style:normal;color:var(--muted);font-family:var(--mono);width:18px;font-size:12px}
+  .toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-20px);opacity:0;z-index:120;background:#1b1236;border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-size:14px;max-width:92vw;transition:.3s;pointer-events:none;text-align:center}.toast.on{opacity:1;transform:translate(-50%,0)}
+  @media(min-width:860px){.wrap{padding:44px 24px 130px}.banner{height:190px}.cols{grid-template-columns:1.15fr .85fr;padding:14px 28px 26px}.head{padding:0 28px}.tags{padding:18px 28px 6px}.foot{padding:13px 28px}
+    .player{left:auto;right:24px;bottom:24px;width:380px}.vol{display:block}.links{grid-template-columns:1fr 1fr}}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+  /* Con trỏ chuột: khung vuông xoay + tia sáng */
+  #cur,#frame{position:fixed;left:0;top:0;pointer-events:none;display:none;opacity:0;transition:opacity .25s}
+  #cur{z-index:200;width:20px;height:20px;margin:-10px 0 0 -10px;color:#f472b6;filter:drop-shadow(0 0 7px #f472b6)}#cur svg{width:100%;height:100%;fill:currentColor;animation:twinkle 1.6s ease-in-out infinite}
+  @keyframes twinkle{50%{transform:scale(.7) rotate(45deg)}}
+  #frame{z-index:199;width:36px;height:36px;margin:-18px 0 0 -18px}#frame .in{position:absolute;inset:0;animation:turn 9s linear infinite;transition:inset .22s}
+  #frame.hot .in{inset:-9px}#frame.down .in{inset:5px}@keyframes turn{to{transform:rotate(360deg)}}
+  #frame i{position:absolute;width:10px;height:10px;border:2px solid rgba(255,255,255,.9);transition:border-color .2s}#frame.hot i{border-color:#f472b6}
+  #frame i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}#frame i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+  #frame i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}#frame i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+  .fine #cur,.fine #frame{display:block}.fine.on #cur,.fine.on #frame{opacity:1}.fine,.fine *{cursor:none!important}
+  .sp{position:fixed;z-index:198;pointer-events:none;color:#f9a8d4;font-size:13px;line-height:1;animation:spk .85s ease-out forwards;text-shadow:0 0 8px #f472b6}
+  @keyframes spk{to{opacity:0;transform:translateY(26px) scale(.2) rotate(120deg)}}
+  /* Chữ chạy ngang + hiện lần lượt */
+  .mq{overflow:hidden;margin:16px 24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .mqi{display:flex;width:max-content;animation:mq 30s linear infinite;font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;color:var(--muted);white-space:nowrap}.mqi span{padding-right:44px}@keyframes mq{to{transform:translateX(-50%)}}
+  .tag{opacity:0}.go .tag{animation:up .6s cubic-bezier(.2,.8,.2,1) both}@keyframes up{from{opacity:0;transform:translateY(14px) scale(.9)}to{opacity:1;transform:none}}
+  .go .bio,.go .box{animation:fadein .9s ease both}@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  #name{cursor:default}
+  @media(min-width:860px){.mq{margin:16px 28px 0}}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div id="cur" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z"/></svg></div>
+<div id="frame" aria-hidden="true"><div class="in"><i></i><i></i><i></i><i></i></div></div>
+<div id="enter" role="button" tabindex="0"><b id="enterName"></b><span id="enterText"></span></div>
+
+<main class="wrap"><section class="card" id="card">
+  <div class="banner" id="banner"><div class="live"><span class="dot"></span><span id="liveText"></span></div></div>
+  <div class="head">
+    <div class="ava"><i id="ava"></i></div>
+    <div class="who"><h1><span id="name"></span><svg class="badge" id="badge" viewBox="0 0 24 24" aria-label="Đã xác minh"><circle cx="12" cy="12" r="11" fill="#9ca3af"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></h1>
+      <div class="sub"><b id="handle"></b> · <span id="headline"></span></div></div>
+  </div>
+  <div class="tags" id="tags"></div>
+  <div class="mq" aria-hidden="true"><div class="mqi" id="mqi"></div></div>
+  <div class="cols">
+    <div>
+      <div class="box term"><span class="p">&gt;_</span><span id="typed"></span></div>
+      <p class="bio" id="bio"></p>
+      <div class="lbl">Trạng thái</div>
+      <div class="box status"><span class="dot"></span><div><span id="status"></span><small id="statusSub"></small></div></div>
+    </div>
+    <div>
+      <div class="lbl" style="margin-top:0" id="commLbl">Cộng đồng</div>
+      <div class="box comm"><div class="logo">★</div><div class="t"><b id="cTitle"></b><span class="o" id="cBadge"></span><p id="cStats"></p><p id="cDesc"></p></div><a class="btn" id="cBtn" target="_blank" rel="noopener noreferrer"></a></div>
+      <div class="lbl">Liên kết</div><div class="links" id="links"></div>
+    </div>
+  </div>
+  <div class="foot"><span id="clock"></span><span id="footer"></span></div>
+</section></main>
+
+<aside class="player" id="player" aria-label="Máy phát nhạc">
+  <div class="pr"><div class="disc" id="disc"></div><button class="meta" id="meta" aria-label="Mở danh sách bài hát"><b id="tTitle"></b><span id="tArtist"></span></button>
+    <div class="ctl"><button class="ib" id="prev" aria-label="Bài trước"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zM20 6v12L9.5 12z"/></svg></button>
+      <button class="ib play" id="play" aria-label="Phát / tạm dừng"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="ib" id="next" aria-label="Bài tiếp"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM4 6v12l10.5-6z"/></svg></button>
+      <input class="vol" id="vol" type="range" min="0" max="1" step="0.05" value="0.6" aria-label="Âm lượng"></div></div>
+  <div class="bar" id="bar"><i id="prog"></i></div><div class="list" id="list"></div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+'use strict';
+/* =====================================================================
+   SỬA TRANG CỦA BẠN Ở ĐÂY. Chỉ cần thay chữ trong dấu nháy, không đụng phần còn lại.
+   Để trống link ('') thì nút đó tự mờ đi.
+   ===================================================================== */
+const CONFIG = {
+  name: 'Tên của bạn', verified: true, handle: '@tenban', headline: 'Mô tả ngắn về bạn',
+  avatar: '',                       // link ảnh đại diện (https://...), để trống sẽ dùng chữ cái đầu
+  banner: '',                       // link ảnh bìa (https://...), để trống sẽ dùng màu mặc định
+  live: 'ĐANG ONLINE',
+  tags: ['Game', 'Sáng tạo nội dung', 'Lập trình', 'Âm nhạc'],
+  typing: ['Xin chào, mình là Tên của bạn.', 'Chào mừng bạn đến trang cá nhân của mình.', 'Chọn bài nhạc ở góc dưới nhé ♪'],
+  marquee: ['CHÀO MỪNG BẠN GHÉ THĂM', 'NHẠC ĐANG PHÁT Ở GÓC DƯỚI', 'THEO DÕI MÌNH Ở CÁC LIÊN KẾT BÊN PHẢI'],   // dải chữ chạy ngang
+  bio: 'Viết vài dòng giới thiệu về bạn ở đây: bạn làm gì, bạn thích gì, bạn muốn mọi người biết điều gì.',
+  status: 'Đang rảnh', statusSub: 'Nhắn tin mình bất cứ lúc nào',
+  communityLabel: 'Cộng đồng',
+  community: { title: 'Tên nhóm của bạn', badge: 'CHÍNH THỨC', stats: '100 đang online · 1.000 thành viên', desc: 'Mô tả ngắn về nhóm hoặc server của bạn.', button: 'Tham gia', url: '' },
+  links: [{ label: 'TikTok', url: '' }, { label: 'Facebook', url: '' }, { label: 'YouTube', url: '' }, { label: 'Zalo', url: '' }],
+  footer: 'TÊN BẠN • TRANG CÁ NHÂN',
+  enterText: '— bấm để vào —',
+  /* 6 bài nhạc: bỏ file mp3 BẠN CÓ QUYỀN DÙNG vào thư mục "music" cạnh file này, rồi sửa tên bài/nghệ sĩ */
+  tracks: [
+    { title: 'Bài số 1', artist: 'Tên nghệ sĩ', src: 'music/1.mp3' },
+    { title: 'Bài số 2', artist: 'Tên nghệ sĩ', src: 'music/2.mp3' },
+    { title: 'Bài số 3', artist: 'Tên nghệ sĩ', src: 'music/3.mp3' },
+    { title: 'Bài số 4', artist: 'Tên nghệ sĩ', src: 'music/4.mp3' },
+    { title: 'Bài số 5', artist: 'Tên nghệ sĩ', src: 'music/5.mp3' },
+    { title: 'Bài số 6', artist: 'Tên nghệ sĩ', src: 'music/6.mp3' },
+  ],
+};
+/* ===================================================================== */
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : '');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ctxEsc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ---------- Đổ nội dung ---------- */
+document.title = CONFIG.name;
+$('#enterName').textContent = CONFIG.name; $('#enterText').textContent = CONFIG.enterText;
+$('#name').textContent = CONFIG.name; $('#handle').textContent = CONFIG.handle; $('#headline').textContent = CONFIG.headline;
+$('#badge').style.display = CONFIG.verified ? '' : 'none'; $('#liveText').textContent = CONFIG.live;
+$('#bio').textContent = CONFIG.bio;
+{ const line = (CONFIG.marquee || []).join('   ✦   ') + '   ✦   '; const one = `<span>${ctxEsc(line.repeat(4))}</span>`; $('#mqi').innerHTML = one + one; }
+ $('#status').textContent = CONFIG.status; $('#statusSub').textContent = CONFIG.statusSub;
+$('#footer').textContent = CONFIG.footer; $('#commLbl').textContent = CONFIG.communityLabel;
+if (safeUrl(CONFIG.banner)) $('#banner').style.backgroundImage = `url("${CONFIG.banner.replace(/"/g, '%22')}")`;
+const ava = $('#ava');
+if (safeUrl(CONFIG.avatar)) { const im = new Image(); im.alt = ''; im.src = CONFIG.avatar; im.onerror = () => { ava.textContent = (CONFIG.name || '?')[0].toUpperCase(); im.remove(); }; ava.appendChild(im); }
+else ava.textContent = (CONFIG.name || '?')[0].toUpperCase();
+$('#tags').innerHTML = CONFIG.tags.map((t, i) => `<span class="tag" style="animation-delay:${250 + i * 110}ms">${ctxEsc(t)}</span>`).join('');
+const C = CONFIG.community; $('#cTitle').textContent = C.title; $('#cBadge').textContent = C.badge; $('#cStats').textContent = C.stats; $('#cDesc').textContent = C.desc;
+const cb = $('#cBtn'); cb.textContent = C.button; if (safeUrl(C.url)) cb.href = C.url; else cb.setAttribute('aria-disabled', 'true');
+$('#links').innerHTML = CONFIG.links.map((l) => safeUrl(l.url) ? `<a href="${ctxEsc(l.url)}" target="_blank" rel="noopener noreferrer">${ctxEsc(l.label)}</a>` : `<a aria-disabled="true">${ctxEsc(l.label)}</a>`).join('');
+
+/* ---------- Chữ giải mã (name, headline) ---------- */
+function scramble(el, final, ms) {
+  if (reduce) { el.textContent = final; return; }
+  const pool = '!<>-_\\/[]{}=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', n = final.length, t0 = performance.now();
+  (function f(t) {
+    const p = Math.min(1, (t - t0) / ms), done = Math.floor(p * n); let out = '';
+    for (let i = 0; i < n; i++) out += (i < done || final[i] === ' ') ? final[i] : pool[Math.floor(Math.random() * pool.length)];
+    el.textContent = out; if (p < 1) requestAnimationFrame(f); else el.textContent = final;
+  })(t0);
+}
+$('#name').addEventListener('mouseenter', () => scramble($('#name'), CONFIG.name, 600));
+
+/* ---------- Con trỏ chuột kiểu khung vuông ---------- */
+if (!reduce && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  const root = document.documentElement, fr = $('#frame'), cur = $('#cur'); root.classList.add('fine');
+  let x = innerWidth / 2, y = innerHeight / 2, fx = x, fy = y, last = 0;
+  addEventListener('pointermove', (e) => {
+    x = e.clientX; y = e.clientY; root.classList.add('on'); cur.style.transform = `translate(${x}px,${y}px)`;
+    fr.classList.toggle('hot', !!(e.target.closest && e.target.closest('a,button,[role=button],input,.tag,#name,.bar')));
+    const now = performance.now();
+    if (now - last > 55) { last = now; const s = document.createElement('span'); s.className = 'sp'; s.textContent = '✦'; s.style.left = (x + (Math.random() * 14 - 7)) + 'px'; s.style.top = (y + (Math.random() * 10)) + 'px'; document.body.appendChild(s); setTimeout(() => s.remove(), 900); }
+  });
+  (function loop() { fx += (x - fx) * 0.17; fy += (y - fy) * 0.17; fr.style.transform = `translate(${fx}px,${fy}px)`; requestAnimationFrame(loop); })();
+  addEventListener('pointerdown', () => fr.classList.add('down')); addEventListener('pointerup', () => fr.classList.remove('down'));
+  document.documentElement.addEventListener('mouseleave', () => root.classList.remove('on'));
+  document.documentElement.addEventListener('mouseenter', () => root.classList.add('on'));
+}
+
+/* ---------- Chữ chạy ---------- */
+function typer(el, phrases) {
+  if (reduce || !phrases.length) { el.textContent = phrases[0] || ''; return; }
+  let i = 0, j = 0, dir = 1;
+  (function tick() {
+    const p = phrases[i];
+    if (dir > 0) { j++; el.textContent = p.slice(0, j); if (j >= p.length) { dir = -1; return setTimeout(tick, 1800); } return setTimeout(tick, 55); }
+    j--; el.textContent = p.slice(0, j); if (j <= 0) { dir = 1; i = (i + 1) % phrases.length; return setTimeout(tick, 350); } setTimeout(tick, 26);
+  })();
+}
+typer($('#typed'), CONFIG.typing);
+
+/* ---------- Đồng hồ (giờ Việt Nam) ---------- */
+const fmt = new Intl.DateTimeFormat('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+(function clock() { $('#clock').textContent = '🕒 ' + fmt.format(new Date()) + ' (GMT+7)'; setTimeout(clock, 1000); })();
+
+/* ---------- Nền sao ---------- */
+(function sky() {
+  const cv = $('#sky'), g = cv.getContext('2d'); let w, h, stars = [];
+  const size = () => { w = cv.width = innerWidth; h = cv.height = innerHeight; stars = Array.from({ length: Math.min(140, Math.floor((w * h) / 12000)) }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.4 + .3, s: Math.random() * .25 + .05, t: Math.random() * 6.28 })); };
+  size(); addEventListener('resize', size);
+  function draw() { g.clearRect(0, 0, w, h); for (const s of stars) { s.t += .02; s.y -= s.s; if (s.y < -2) { s.y = h + 2; s.x = Math.random() * w; }
+      g.globalAlpha = .35 + Math.sin(s.t) * .3; g.fillStyle = s.r > 1.1 ? '#f0abfc' : '#fff'; g.beginPath(); g.arc(s.x, s.y, s.r, 0, 6.28); g.fill(); }
+    if (!reduce && !document.hidden) requestAnimationFrame(draw); }
+  if (reduce) draw(); else { (function loop() { draw(); setTimeout(() => requestAnimationFrame(loop), 0); })(); }
+})();
+
+/* ---------- Nghiêng thẻ theo chuột (máy tính) ---------- */
+if (!reduce && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  const card = $('#card');
+  addEventListener('pointermove', (e) => { const x = (e.clientX / innerWidth - .5), y = (e.clientY / innerHeight - .5); card.style.transform = `rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`; });
+}
+
+/* ---------- Máy phát nhạc ---------- */
+const T = CONFIG.tracks, audio = new Audio(); audio.preload = 'none'; audio.volume = 0.6;
+let idx = 0;
+const toast = (m) => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3200); };
+const ICON_PLAY = '<path d="M8 5v14l11-7z"/>', ICON_PAUSE = '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>';
+function paint() {
+  const t = T[idx] || { title: '', artist: '' };
+  $('#tTitle').textContent = t.title; $('#tArtist').textContent = t.artist;
+  $('#playIcon').innerHTML = audio.paused ? ICON_PLAY : ICON_PAUSE; $('#disc').classList.toggle('on', !audio.paused);
+  $('#list').innerHTML = T.map((x, i) => `<button class="${i === idx ? 'now' : ''}" data-i="${i}"><em>${i + 1}</em><span>${ctxEsc(x.title)} · ${ctxEsc(x.artist)}</span></button>`).join('');
+}
+function load(i) { idx = (i + T.length) % T.length; audio.src = T[idx].src; $('#prog').style.width = '0'; paint(); }
+async function play() { if (!T.length) return; if (!audio.src) load(idx); try { await audio.play(); } catch (e) { /* lỗi file được báo ở sự kiện error */ } paint(); }
+function toggle() { if (audio.paused) play(); else { audio.pause(); paint(); } }
+audio.addEventListener('ended', () => { load(idx + 1); play(); });
+audio.addEventListener('timeupdate', () => { if (audio.duration) $('#prog').style.width = (audio.currentTime / audio.duration) * 100 + '%'; });
+audio.addEventListener('play', paint); audio.addEventListener('pause', paint);
+audio.addEventListener('error', () => { toast(`Chưa có file nhạc "${T[idx].src}". Hãy bỏ file mp3 vào thư mục music.`); paint(); });
+$('#play').onclick = toggle; $('#next').onclick = () => { load(idx + 1); play(); }; $('#prev').onclick = () => { load(idx - 1); play(); };
+$('#vol').oninput = (e) => { audio.volume = Number(e.target.value); };
+$('#bar').onclick = (e) => { if (audio.duration) audio.currentTime = ((e.clientX - e.currentTarget.getBoundingClientRect().left) / e.currentTarget.offsetWidth) * audio.duration; };
+$('#meta').onclick = () => $('#list').classList.toggle('on');
+$('#list').onclick = (e) => { const b = e.target.closest('button[data-i]'); if (b) { load(Number(b.dataset.i)); play(); } };
+paint();
+
+/* ---------- Màn hình chào: bấm để vào (trình duyệt chỉ cho phát nhạc sau khi người xem bấm) ---------- */
+const enter = $('#enter');
+const go = () => { enter.classList.add('hide'); document.body.classList.add('go'); scramble($('#name'), CONFIG.name, 1000); scramble($('#headline'), CONFIG.headline, 1400); play(); };
+enter.onclick = go; enter.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') go(); };
+</script>
+</body>
+</html>
